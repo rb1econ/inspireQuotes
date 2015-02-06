@@ -58,7 +58,7 @@ $(document).on('ready', function() {
                                  '<input type="radio" name="rating'+j+'" value="4"><i></i>'+
                                  '<input type="radio" name="rating'+j+'" value="5"><i></i>'+
                             "</span>"+
-                            '<strong class="choice">Choose a rating</strong>';
+                            '<strong class="choice"> Choose a rating</strong>';
 
                             j++;
 
@@ -78,18 +78,20 @@ $(document).on('ready', function() {
 
       
    $('.submitdQuotes').on('click', '.submitRating', function(){
-      var inputValueRating = $(this).parent().children('.stars').children('.choice').text()[0];
+      var inputValueRating = $(this).parent().children('.stars').children('.choice').text()[1];
       
       // console.log('rated: ', inputValueRating);
       var textOfThisQuote =  $(this).parent().children('h4').html();
       console.log('textOfThisQuote:', textOfThisQuote);
 
-
-      $(manyQuotes).map(function(item){
-         console.log('Quote text from manyQuotes array:', manyQuotes[item].text);
-         if(manyQuotes[item].text === textOfThisQuote){
-            manyQuotes[item].rating = inputValueRating;
-            console.log('found the object: ', manyQuotes[item]);
+      // console.log(manyQuotes.map(function(item){
+      //    return item.text
+      // }));
+      manyQuotes.map(function(item){
+         console.log('Quote text from manyQuotes array:', item.text);
+         if(item.text === textOfThisQuote){
+            item.rating = inputValueRating;
+            console.log('found the object: ', item);
          }
       });
       // console.log('this submitted a rating', this);
@@ -100,7 +102,7 @@ $(document).on('ready', function() {
 // This makes the text change next to the radio buttons. Also the rating property on quote objects gets the number from here:::::::::::
    $('.submitdQuotes').on('change', '.starRating input', function(){
       console.log('radio this: ', this);
-      $(this).parent().siblings(".choice").text(this.value + ' stars');
+      $(this).parent().siblings(".choice").text(' ' + this.value + ' stars');
          
    });
 
@@ -129,19 +131,19 @@ $('#sortByAuthor').on('click', function(){
 
 // BEGIN REMOVE AND APPEND
 
-   $(manyQuotes).map(function(item){
+   manyQuotes.map(function(item){
 
       var starshtml = ' <span class="starRating">' +
-                                 '<input type="radio" name="rating'+item+'" value="1"><i></i>'+
-                                 '<input type="radio" name="rating'+item+'" value="2"><i></i>'+
-                                 '<input type="radio" name="rating'+item+'" value="3"><i></i>'+
-                                 '<input type="radio" name="rating'+item+'" value="4"><i></i>'+
-                                 '<input type="radio" name="rating'+item+'" value="5"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="1"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="2"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="3"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="4"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="5"><i></i>'+
                             "</span>"+
-                            '<strong class="choice">'+manyQuotes[item].rating+' stars</strong>';
+                            '<strong class="choice"> '+item.rating+' stars</strong>';
+                            k++;
 
-
-   $('<div><h4 id="quoteNauth">'+manyQuotes[item].text+'</h4><p> by: '+manyQuotes[item].author+'</p><div class="stars">'+starshtml+'</div><button class="submitRating">Rate</button></div>')
+   $('<div><h4 id="quoteNauth">'+item.text+'</h4><p> by: '+item.author+'</p><div class="stars">'+starshtml+'</div><button class="submitRating">Rate</button></div>')
       .appendTo('.submitdQuotes');
       
    });
@@ -166,25 +168,102 @@ $('#sortByRating').on('click', function(){
       else {
          return 0;
       }
-   }
+   };
    manyQuotes.sort(compare);
 // END COMPARE AND SORT::
 // BEGIN REMOVE AND APPEND
 
-   $(manyQuotes).map(function(item){
+   manyQuotes.map(function(item){
 
       var starshtml = ' <span class="starRating">' +
-                                 '<input type="radio" name="rating'+item+'" value="1"><i></i>'+
-                                 '<input type="radio" name="rating'+item+'" value="2"><i></i>'+
-                                 '<input type="radio" name="rating'+item+'" value="3"><i></i>'+
-                                 '<input type="radio" name="rating'+item+'" value="4"><i></i>'+
-                                 '<input type="radio" name="rating'+item+'" value="5"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="1"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="2"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="3"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="4"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="5"><i></i>'+
                             "</span>"+
-                            '<strong class="choice">'+manyQuotes[item].rating+' stars</strong>';
+                            '<strong class="choice"> '+item.rating+' stars</strong>';
+                           k++;
 
-
-   $('<div><h4 id="quoteNauth">'+manyQuotes[item].text+'</h4><p> by: '+manyQuotes[item].author+'</p><div class="stars">'+starshtml+'</div><button class="submitRating">Rate</button></div>')
+   $('<div><h4 id="quoteNauth">'+item.text+'</h4><p> by: '+item.author+'</p><div class="stars">'+starshtml+'</div><button class="submitRating">Rate</button></div>')
       .appendTo('.submitdQuotes');
       
    });
+});
+// END SORT BY RATING:::::::
+
+
+// BEGIN FILTER BY AUTHOR::::::::
+   // GENERATE LIST OF AUTHORS FROM 'manyQuotes' master array:::::::
+$('#quoteSubmit').on('click', function(){
+   // first remove anything that might be there::::
+   $('.authorList').children().remove();
+   // second compare and sort:
+   var compare = function(a,b){
+      if(a.author < b.author){
+         return -1;
+      }
+      if(a.author > b.author){
+         return 1;
+      }
+      else {
+         return 0;
+      }
+   };
+
+   manyQuotes.sort(compare);
+
+   // make array containing nothing but authors:::::::::
+   var justAuthorArray = []; 
+   for(var key in manyQuotes){
+      justAuthorArray.push(manyQuotes[key].author);
+      // console.log('for in loop used');
+   }
+
+   console.log('justAuthorArray: ', justAuthorArray);
+
+   // eliminate duplicates:::::::::
+   var uniqAuthArray= [];
+
+   uniqAuthArray = _.uniq(justAuthorArray);
+
+   console.log("unique author array", uniqAuthArray);
+   uniqAuthArray.map(function(item){
+      $('<li>'+ item +'</li>').appendTo('.authorList');
+   });
+});
+
+// BEGIN CLICKABLE AUTHOR LIST
+$('.sortandstuff').on('click', 'li', function(){
+   var chosenAuthor = $(this).html();
+   console.log("this was clicked: ", chosenAuthor);
+   
+   // ACTUAL FILTER::::::
+   var singleAuthorArrayObj = manyQuotes.filter(function(elem){
+      if(elem.author === chosenAuthor){
+         return elem;
+      }
+   });
+   console.log('singleAuthorArrayObj: ', singleAuthorArrayObj);
+
+   // REMOVE AND APPEND QUOTES:::::::::::::::::::::::::::::::::::::::
+   // REMOVE ALL QUOTES FROM '.submmitdQuotes'
+   $('.submitdQuotes').children().remove();
+   singleAuthorArrayObj.map(function(item){
+
+      var starshtml = ' <span class="starRating">' +
+                                 '<input type="radio" name="rating'+k+'" value="1"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="2"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="3"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="4"><i></i>'+
+                                 '<input type="radio" name="rating'+k+'" value="5"><i></i>'+
+                            "</span>"+
+                            '<strong class="choice"> '+item.rating+' stars</strong>';
+                           k++;
+
+   $('<div><h4 id="quoteNauth">'+item.text+'</h4><p> by: '+item.author+'</p><div class="stars">'+starshtml+'</div><button class="submitRating">Rate</button></div>')
+      .appendTo('.submitdQuotes');
+      
+   });   
+
 });

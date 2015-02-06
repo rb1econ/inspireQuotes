@@ -6,12 +6,11 @@ body {
    background: #59C4C6;
    width: 383px;
    height: 100%;
-   margin-left:160px;
+   margin:0 0 60px 180px;
    padding: 20px;
    color: #396B30;
    border-radius: 2em;
    opacity: .90;
-
 }
 h3{
    margin-top: 5px
@@ -45,6 +44,7 @@ h1 {
 }
 .sortandstuff {
    position: fixed;
+   width: 130px;
    top: 100px;
    left: 0;
    background: #59C4C6;
@@ -60,8 +60,18 @@ button{
    border: none;
    border-radius: .2em;
    color: #FFFFFF;
-   background: #396B30;
-
-   
+   background: #396B30; 
 }
 
+.sortandstuff button {
+   width: 115px;
+}
+.sortandstuff li {
+   padding-bottom: 5px;
+   cursor: pointer;
+}
+
+/*h4{
+   border-top: 2px solid 
+}
+*/
